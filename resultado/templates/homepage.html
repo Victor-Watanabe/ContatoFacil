@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}
+ContatoFacil
+{% endblock %}
+
+{% block content %}
+      <div class="notification">
+        Este Site está em Desenvolvimento. Algumas Funcionalidades Podem Estar Indisponíveis!
+      </div>
+    <style>
+        .notification {
+    position: fixed;
+    background-color: rgba(255, 0, 0, 0.8);
+    bottom: 20px;
+    right: 20px;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 999;
+    transition: opacity 0.5s;
+    }
+    </style>
+<header class="min-h-screen bg-black bg-opacity-75 bg-blend-overlay showcase border-gray-600 border-b-8 flex justify-center items-center bg-no-repeat"  style="background-image: url('{% static 'images/googlemaps.png'%}');">
+        <div class="z-10 h-full py-32 md:py-0 text-gray-100 text-center flex items-center flex-col">
+
+            <h1 class="font-bold text-4xl md:text-5xl w-10/12 md:w-3/4 text-center">
+                Obtenha Informações Comerciais Sem Sair de Casa!
+            </h1>
+            <h3 class="text-xl md:text-xl py-5">
+                Uma Pesquisa, Vários Resultados.
+            </h3>
+            <h4 class="text-sm md:text-lg pb-3">
+                Quer começar? Coloque seu e-mail abaixo para Cadastro/Login.
+            </h4>
+
+            <div class="w-full flex justify-center">
+                <div class="flex justify-center items-center w-11/12 md:w-10/12">
+                         <div class="flex flex-grow justify-center items-stretch">
+                                <input type="email" class="w-80 p-2 text-black md:text-xl" placeholder="Digite aqui...">
+                            <a href="search_page/">
+                                <button class="bg-red-700 font-medium md:font-normal flex justify-center items-center py-2 px-3 md:px-0 rounded-br-sm rounded-tr-sm md:text-2xl" type="submit">
+                                    <span>
+                                        Acessar
+                                    </span>
+                                    <ion-icon name="chevron-forward-outline" class="text-2xl"></ion-icon>
+                                </button>
+                            </a>
+                        </div>
+                </div>
+            </div>
+
+        </div>
+    </header>
+<footer class=" bg-black px-5 py-10 text-white md:text-xl">
+        <ul class="flex justify-between items-center">
+
+            <li>&copy; FEV/2024 por Victor Watanabe</li>
+            <li class="pr-52"> Feito com Python (Django)</li>
+            <li>FCamboa</li>
+        </ul>
+    </footer>
+
+
+
+{% endblock %}

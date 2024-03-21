@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}
+return_page
+{% endblock %}
+{% block content %}
+<header class="min-h-screen bg-black bg-opacity-75 bg-blend-overlay showcase border-gray-600 border-b-8 flex justify-center items-center bg-no-repeat"  style="background-image: url('{% static 'images/googlemaps.png'%}');">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resultados Da Pesquisa Solicitada</title>
+        <style>
+            .custom-checkbox {
+            display: none;
+        }
+
+        .custom-checkbox-label {
+            position: relative;
+            padding-left: 25px;
+            cursor: pointer;
+        }
+
+        /* Estilo do símbolo de marcação */
+        .custom-checkbox-label:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #999;
+            border-radius: 3px;
+        }
+
+        /* Estilo do símbolo de marcação quando marcado */
+        .custom-checkbox:checked + .custom-checkbox-label:before {
+            background-color: #007bff; /* Cor quando marcado */
+            border-color: #007bff;
+        }
+
+        /* Estilo do símbolo de marcação de verificação */
+        .custom-checkbox-label:after {
+            content: '\2713'; /* Unicode para marca de seleção */
+            font-size: 16px;
+            position: absolute;
+            top: 1px; /* Ajuste para centralizar verticalmente */
+            left: 3px; /* Ajuste para centralizar horizontalmente */
+            color: #fff; /* Cor do símbolo de marcação */
+            visibility: hidden;
+        }
+
+        /* Estilo do símbolo de marcação quando o checkbox está marcado */
+        .custom-checkbox:checked + .custom-checkbox-label:after {
+            visibility: visible;
+        }
+            body {
+                margin: 0; /* Remove margens padrão */
+                padding: 0; /* Remove preenchimento padrão */
+                height: 100%; /* Define a altura do corpo como 100% da janela do navegador */
+                background: linear-gradient(to bottom, #333333, #666666); /* Define um fundo gradiente de preto para cinza */
+                font-family: Arial, sans-serif; /* Define uma fonte padrão */
+                color: white; /* Define a cor do texto como branca */
+                overflow-y: scroll; /* Adiciona uma barra de rolagem vertical quando o conteúdo exceder a altura da janela do navegador */
+            }
+
+            .container {
+                width: 50%; /* Define a largura do contêiner como 50% da largura da janela do navegador */
+                margin: 50px auto; /* Centraliza o contêiner na página */
+            }
+
+            .tabela-wrapper {
+                position: fixed;
+                top: 140px; /* Espaçamento superior */
+                left: 0;
+                width: 70%; /* Ajuste conforme necessário */
+                max-width: 70vw; /* Ajuste conforme necessário */
+                overflow-y: auto; /* Adiciona uma barra de rolagem vertical caso a tabela seja longa */
+                border-collapse: collapse; /* Colapsa as bordas da tabela */
+                padding: 20px; /* Espaçamento interno */
+            }
+
+            .table td {
+                background-color: #f0f0f0; /* Cor de fundo para as células (cinza claro) */
+                box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1); /* Sombra para as células */
+            }
+
+            th, td {
+                padding: 10px; /* Adiciona espaço interno às células da tabela */
+                border: 2px solid black; /* Adiciona uma borda branca de 1px às células da tabela */
+
+            }
+
+            th {
+                background-color: #B91C1C; /* Cor de fundo para o cabeçalho */
+                color: white; /* Cor do texto para o cabeçalho */
+                box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2); /* Sombra para o cabeçalho */
+                text-align: center; /* Centraliza o texto dos cabeçalhos */
+            }
+
+             tr {
+                 background-color: #393d42; /* Define uma cor de fundo para as linhas da tabela */
+             }
+
+            tr:nth-child(even) {
+                background-color: #555555; /* Define uma cor de fundo mais escura para as linhas pares da tabela */
+            }
+
+            tr:hover {
+                background-color: #65727c; /* Define uma cor de fundo mais clara ao passar o mouse sobre as linhas da tabela */
+            }
+        </style>
+    </head>
+        <body>
+            <div class="tabela-wrapper">
+                <!-- Exibir o conteúdo da tabela dentro de uma tabela -->
+                <table>
+                    {{ result_html|safe }}
+                </table>
+            </div>
+        <div>
+          <form style="position: absolute; top: 85%; right: 10px; transform: translateY(-50%);">
+                <textarea
+                    id="message" name="message"
+                    placeholder="exemplo"
+                    style="position: fixed; bottom: 40px; right: 10px; height: 136px; width: 500px; border: 2px solid black; margin: 0; padding: 0;"
+                    class = "text-black">
+                </textarea>
+                    <div class="text-2xl font-medium bg-red-700 md:text-2xl py-1 px-3 p-1" style="margin-right: 10px;">
+                        <input type='submit' value='Enviar' style="margin-right: 10px;">
+                        <ion-icon name="send-outline" style="margin-top: 10px;"></ion-icon>
+                    </div>
+          </form>
+        </div>
+    </body>
+</header>
+   <footer class="bg-black px-5 py-10 text-white md:text-xl">
+            <ul class="flex justify-between items-center">
+
+                <li>&copy; FEV/2024 por Victor Watanabe</li>
+                <li> Feito com Python (Django)</li>
+                <li>FCamboa</li>
+            </ul>
+   </footer>
+{% endblock %}
