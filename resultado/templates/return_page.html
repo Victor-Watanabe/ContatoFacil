@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block titulo %}
-return_page
+Resultados
 {% endblock %}
 {% block content %}
 <header class="min-h-screen bg-black bg-opacity-75 bg-blend-overlay showcase border-gray-600 border-b-8 flex justify-center items-center bg-no-repeat"  style="background-image: url('{% static 'images/googlemaps.png'%}');">
@@ -113,22 +113,23 @@ return_page
     </head>
         <body>
             <div class="tabela-wrapper">
-                <!-- Exibir o conteúdo da tabela dentro de uma tabela -->
+                    <!-- Exibir o conteúdo da tabela dentro de uma tabela -->
                 <table>
                     {{ result_html|safe }}
                 </table>
             </div>
-        <div>
-          <form style="position: absolute; top: 85%; right: 10px; transform: translateY(-50%);">
+            <div>
+          <form action="{%url 'auto_whatsapp'%}" method="POST" style="position: absolute; top: 85%; right: 10px; transform: translateY(-50%);">
+              {% csrf_token %}
                 <textarea
                     id="message" name="message"
-                    placeholder="exemplo"
                     style="position: fixed; bottom: 40px; right: 10px; height: 136px; width: 500px; border: 2px solid black; margin: 0; padding: 0;"
-                    class = "text-black">
+                    class="text-black md:text-xl justify-center items-stretch rounded-br-sm rounded-tr-sm">
+Digite sua Mensagem Aqui...
                 </textarea>
                     <div class="text-2xl font-medium bg-red-700 md:text-2xl py-1 px-3 p-1" style="margin-right: 10px;">
                         <input type='submit' value='Enviar' style="margin-right: 10px;">
-                        <ion-icon name="send-outline" style="margin-top: 10px;"></ion-icon>
+                            <ion-icon name="send-outline" style="margin-top: 10px;"></ion-icon>
                     </div>
           </form>
         </div>
@@ -136,9 +137,8 @@ return_page
 </header>
    <footer class="bg-black px-5 py-10 text-white md:text-xl">
             <ul class="flex justify-between items-center">
-
                 <li>&copy; FEV/2024 por Victor Watanabe</li>
-                <li> Feito com Python (Django)</li>
+                <li>Feito com Python (Django)</li>
                 <li>FCamboa</li>
             </ul>
    </footer>
