@@ -23,6 +23,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from time import sleep
 import pandas as pd
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import TimeoutException
 
 # Rendenizando página HomePage
 selected_phones = []
@@ -177,13 +179,17 @@ def auto_whatsapp(request):
         message_bar.send_keys(message)
         message_bar.send_keys(Keys.RETURN)
 
-        enviar = driver.find_element(By.XPATH, '//button[@aria-label="Enviar"]')
-        wait = WebDriverWait(driver, timeout=3)
-        enviar.click()
+        try:
+            enviar = driver.find_element(By.XPATH, '//button[@aria-label="Enviar"]')
+            wait = WebDriverWait(driver, timeout=3)
+            enviar.click()
+
+        except NoSuchElementException:
+            pass
 
         # Saindo do site após realizar o envio da mensagem solicitada.
         driver.quit()
 
-        return HttpResponse("Código Realizado com Sucesso.")
+        return render(request, 'auto_whatsapp_page')
     else:
         return HttpResponse("Método não suportado")
