@@ -7,6 +7,5 @@ urlpatterns = [
     path('',views.homepage, name='home'),
     path('search_page/', views.search),
     path('return_page/', views.all_results, name='return_page'),
-    #path('process_form/', views.process_form, name='process_form'),
     path('auto_whatsapp_page/', views.auto_whatsapp, name='auto_whatsapp'),
 ]

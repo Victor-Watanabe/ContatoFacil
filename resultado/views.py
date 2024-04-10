@@ -23,8 +23,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from time import sleep
 import pandas as pd
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException, TimeoutException
+
 
 # Rendenizando página HomePage
 selected_phones = []
@@ -128,12 +128,16 @@ def all_results(request):
     contact = number[0]
     global new_contact
     new_contact = '+55 ' + contact.replace('(', '').replace(')', '')
+    global formatted_contact
+    formatted_contact = new_contact.replace('9'[0],'',1)
 
     return render(request, 'return_page.html', {'result_html': result_html})
 
     # Automatizando o WhatsApp!
 def auto_whatsapp(request):
-    global new_contact  # Declarando a variável contact como global
+    # Declarando a variável contact como global
+    global new_contact
+    global formatted_contact
 
     # Configuração Driver.
     service = Service(ChromeDriverManager().install())
@@ -146,39 +150,56 @@ def auto_whatsapp(request):
     if request.method == 'POST':
         message = request.POST.get('message')
 
+        # Aguardando a página abrir e o usuário adicionar o whatsapp.
+        wait = WebDriverWait(driver, timeout=120)
+
         # Abrindo o site utilizando a variável.
         driver.get(url_whatsapp)
 
         # Aguardando a página abrir e o usuário adicionar o whatsapp.
-        wait = WebDriverWait(driver, timeout=120)
+        wait = WebDriverWait(driver, timeout=60)
 
-        # Buscando a opção de nova conversa
+    try:
+        # Se a conversa não existir, clique em "Nova conversa"
         new_conversation = wait.until(EC.presence_of_element_located((By.XPATH, '//div[@title="Nova conversa"]')))
         new_conversation.click()
 
-        # Adicionando uma espera global para evitar fechamento do site.
-        driver.implicitly_wait(2)
+        # Aguarde até que a barra de pesquisa esteja disponível
+        search_bar = wait.until(EC.presence_of_element_located((By.XPATH, '//div[@title="Caixa de texto de pesquisa"]')))
+        search_bar.click()
+        sleep(3)
 
-        # Localizando a barra de Pesquisa e apagando ela.
-        search_bar = driver.find_element(By.XPATH, '//div[@title="Caixa de texto de pesquisa"]')
+        #Localize a barra de Pesquisa e apague o conteúdo anterior.
         search_bar.send_keys(new_contact)
         search_bar.send_keys(Keys.CONTROL + 'a')
         search_bar.send_keys(Keys.DELETE)
         search_bar.send_keys(new_contact)
+        sleep(3)
 
-        # Localizando o contato e entrando na conversa, adicionando um tempo de espera.
-        contact_search = wait.until(EC.presence_of_element_located((By.XPATH, '//span[@title="{}"]'.format(new_contact))))
-        time.sleep(10)
-        contact_search.click()
-        wait = WebDriverWait(driver, timeout=10)
+        try:
+            # Localize o contato e clique nele
+            wait = WebDriverWait(driver, timeout=30)
+            contact_search = wait.until(EC.presence_of_element_located((By.XPATH,'//span[@title="{}"]'.format(new_contact))))
+            contact_search.click()
 
-        # Clickando na barra de mensagem e formatando para enviar a mensagem.
+        except TimeoutException:
+            # Caso o contato não tenha o número '9' no início dele, vai ser realizado um tratamento de dados para a correção do erro
+            wait = WebDriverWait(driver, timeout=30)
+            contact_search = wait.until(EC.presence_of_element_located((By.XPATH,'//span[@title="{}"]'.format(formatted_contact))))
+            contact_search.click()
+
+
+        # Adicione um tempo de espera para garantir que a conversa foi aberta
+        wait = WebDriverWait(driver, timeout=60)
+
+        # Clique na barra de mensagem e envie a mensagem
         message_bar = wait.until(EC.presence_of_element_located((By.XPATH, '//div[@title="Digite uma mensagem"]')))
         message_bar.send_keys(Keys.CONTROL + 'a')
         message_bar.send_keys(Keys.DELETE)
         message_bar.send_keys(message)
         message_bar.send_keys(Keys.RETURN)
 
+        # Tente encontrar o botão "Enviar" e clique nele
         try:
             enviar = driver.find_element(By.XPATH, '//button[@aria-label="Enviar"]')
             wait = WebDriverWait(driver, timeout=3)
@@ -187,9 +208,58 @@ def auto_whatsapp(request):
         except NoSuchElementException:
             pass
 
-        # Saindo do site após realizar o envio da mensagem solicitada.
-        driver.quit()
+        sleep(3)
 
-        return render(request, 'auto_whatsapp_page')
+        return render(request, 'auto_whatsapp_page.html')
+
+    # Voltar até o local de pesquisa de conversas já realizadas.
+    except ElementClickInterceptedException or TimeoutException:
+        try:
+            # Voltando a página inicial de conversas do WhatsApp
+            back = driver.find_element(By.XPATH, '//div[@aria-label="Voltar"]')
+            back.click()
+            sleep(3)
+
+            # Aguardando o site rendenizar a caixa de texto de pesquisa e utilizando ela para consulta de conversas já existentes
+            search_bar_2 = wait.until(EC.presence_of_element_located((By.XPATH, '//div[@title="Caixa de texto de pesquisa"]')))
+            search_bar_2.click()
+            sleep(3)
+
+            # Pesquisando o contato na barra de pesquisas
+            search_bar_2.send_keys(new_contact)
+            search_bar_2.send_keys(Keys.CONTROL + 'a')
+            search_bar_2.send_keys(Keys.DELETE)
+            search_bar_2.send_keys(new_contact)
+            sleep(3)
+
+            # Procurando o resultado da pesquisa
+            wait = WebDriverWait(driver, timeout=60)
+            contact_search = wait.until(EC.presence_of_element_located((By.XPATH, '//span[@title="{}"]'.format(new_contact))))
+            contact_search.click()
+
+            # Anexando a mensagem do HTML anterior
+            wait = WebDriverWait(driver, timeout=60)
+            message_bar = wait.until(EC.presence_of_element_located((By.XPATH, '//div[@title="Digite uma mensagem"]')))
+            message_bar.send_keys(Keys.CONTROL + 'a')
+            message_bar.send_keys(Keys.DELETE)
+            message_bar.send_keys(message)
+            message_bar.send_keys(Keys.RETURN)
+
+            try:
+                # Tentando realizar o envio através do botão "Enviar"
+                enviar = driver.find_element(By.XPATH, '//button[@aria-label="Enviar"]')
+                wait = WebDriverWait(driver, timeout=3)
+                enviar.click()
+
+            except NoSuchElementException:
+                pass
+        except NoSuchElementException:
+            #HttpResponse('Erro!')
+            pass
+
+        sleep(3)
+
+        return render(request, 'auto_whatsapp_page.html')
+
     else:
         return HttpResponse("Método não suportado")
