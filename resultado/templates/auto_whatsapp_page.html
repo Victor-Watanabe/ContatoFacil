@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_black.html' %}
 {% load static %}
 
 {% block titulo %}
@@ -7,22 +7,29 @@ notificação| WhatsApp
 
 {% block content %}
 
-<header class="min-h-screen bg-black bg-opacity-75 bg-blend-overlay showcase border-gray-600 border-b-8 flex justify-center items-center bg-no-repeat"  style="background-image: url('{% static 'images/googlemaps.png'%}');">
-    <h1 class="font-bold text-4xl md:text-5xl w-10/12 md:w-3/4 text-center">
-                Mensagem Enviada com Sucesso!
-    </h1>
-    <br>
-    <br>
-    <h3 class="text-xl md:text-xl py-5">
-                (Fique Atento ao seu Aplicativo WhatsApp, Respostas Podem Chegar em breve!)
-    </h3>
-</header>>
- <footer class=" bg-black px-5 py-10 text-white md:text-xl">
-        <ul class="flex justify-between items-center">
+    <header class="min-h-screen bg-black bg-opacity-75 bg-blend-overlay showcase border-gray-600 border-b-8 flex justify-center items-center bg-no-repeat" style="background-image: url('{% static 'images/googlemaps.png'%}');">
+    <div class="z-10 h-full py-32 md:py-0 text-gray-100 text-center flex items-center flex-col">
+        <h1 class="font-serif text-4xl md:text-5xl w-10/12 md:w-3/4 text-center " style="white-space: nowrap; margin-left: -170px;">
+            Mensagem Enviada com <span class="text-red-700">Sucesso!</span>
+        </h1>
+        <h3 class="font-serif text-xl md:text-xl py-2 mx-auto">
+            (Fique Atento ao seu Aplicativo WhatsApp, Respostas Podem Chegar em Breve!)
+        </h3>
+        <a href="/">
+            <button class="bg-red-700 font-medium md:font-normal flex justify-center items-center py-2 px-3 md:px-0 rounded-br-sm rounded-tr-sm md:text-2xl" type="submit">
+                <span>Nova Pesquisa</span>
+                <ion-icon name="search-circle-outline"></ion-icon>
+            </button>
+        </a>
+    </div>
+</header>
+<footer class="bg-black px-5 py-10 text-white md:text-xl text-center">
+    <ul class="flex justify-between items-center">
+        <li>&copy; FEV/2024 por Victor Watanabe</li>
+        <li class="pr-52"> Feito com Python (Django)</li>
+        <li>FCamboa</li>
+    </ul>
+</footer>
 
-            <li>&copy; FEV/2024 por Victor Watanabe</li>
-            <li class="pr-52"> Feito com Python (Django)</li>
-            <li>FCamboa</li>
-        </ul>
-    </footer>
 {% endblock %}
+
