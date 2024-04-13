@@ -17,6 +17,23 @@
     {% block content %}
     {% endblock %}
 
+    <script>
+    const nav = document.querySelector('nav');
+    let lastScrollTop = 0;
+
+    window.addEventListener("scroll", () => {
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (currentScroll > lastScrollTop) {
+            // Scrolling down
+            nav.classList.add('hidden');
+        } else {
+            // Scrolling up
+            nav.classList.remove('hidden');
+        }
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
+    });
+    </script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>

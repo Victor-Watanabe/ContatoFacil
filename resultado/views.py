@@ -33,7 +33,6 @@ selected_phones = []
 def homepage(request):
     return render(request, 'homepage.html')
 
-
 # Rendenizando página Search_Page
 def search(request):
     return render(request, 'search_page.html')
@@ -220,7 +219,7 @@ def auto_whatsapp(request):
 
                     except (TimeoutException, ElementClickInterceptedException):
                         try:
-                            wait = WebDriverWait(driver, timeout=10)
+                            wait = WebDriverWait(driver, timeout=5)
                             contact_search = wait.until(EC.presence_of_element_located((By.XPATH, '//span[@title="{}"]'.format(formatted_contact))))
                             contact_search.click()
 
